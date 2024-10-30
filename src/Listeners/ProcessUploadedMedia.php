@@ -10,9 +10,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Config;
 use Intervention\Image\Facades\Image;
 use RuntimeException;
-use Spatie\MediaLibrary\Conversions\ImageGenerators\Image as ImageGenerator;
 use Spatie\MediaLibrary\MediaCollections\Events\MediaHasBeenAdded;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\MediaLibrary\Conversions\ImageGenerators\ImageGeneratorFactory;
 
 class ProcessUploadedMedia implements ShouldQueue
 {
@@ -63,7 +63,7 @@ class ProcessUploadedMedia implements ShouldQueue
      */
     protected function isImage(Media $media)
     {
-        return (new ImageGenerator())->canHandleMime($media->mime_type);
+        return (ImageGeneratorFactory::forMedia($media))->canHandleMime($media->mime_type);
     }
 
     /**
